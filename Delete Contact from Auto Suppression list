@@ -1,0 +1,27 @@
+<script runat="server">
+    Platform.Load("Core","1");
+
+    var listEmail = ['Your Email Goes here']; /*User Input in array format*/
+    
+    try {
+      for (var i = 0; i<listEmail.length; i++) {
+        var RowsAffected = Platform.Function.DeleteData('Global Auto Suppression',['Email Address'],[listEmail[i]]);
+        var logMessage = RowsAffected == 1 ? "Delete From Global Auto Suppression: Successful" : "Data not found in Global Auto Suppression List";
+        logDeleteDataDE(listEmail[i], logMessage);
+     };
+    } catch(e) {
+      logDeleteDataDE('',"Syntax Error: " + Stringify(e));
+    }
+    
+    /*Error/Success log function DE needs to be created for this*/
+    function logDeleteDataDE(email, deleteStatus) {
+      var deleteDataDE = DataExtension.Init("GlobalAutoSuppression_DeleteLog");
+      deleteDataDE.Rows.Add({
+        "Email Address": email,
+        "Delete Status": deleteStatus,
+        "Timestamp": new Date().getTime()/1000|0,
+        "Date SYD":Platform.Function.SystemDateToLocalDate(Now())
+      })
+    };
+
+</script>
