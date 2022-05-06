@@ -1,0 +1,22 @@
+<script runat="server">
+  
+  Platform.Load("Core","1");
+
+  try {
+   var prox = new Script.Util.WSProxy();
+   var queryDefinition = prox.retrieve('QueryDefinition', ['Name','QueryText']);
+   var queryActivityList = [];
+    
+   for (var i = 0; i < queryDefinition.Results.length; i++) {
+     var queryActivityText = queryDefinition.Results[i];
+     
+     if (queryActivityText.QueryText.indexOf("Your DE Name") >= 0) {
+       Write(queryActivityText.Name);
+       queryActivityList.push(queryActivityText.Name);
+     }
+   };
+  } catch (error) {
+    Write(error)
+  }
+
+</script>
